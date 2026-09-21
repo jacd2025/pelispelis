@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
+import { useMovieDetails } from '@/hooks/useMovieDetails'
 import { useMovieVideos } from '@/hooks/useMovieVideos'
 import type { Movie } from '@/types/movie'
 
@@ -51,13 +52,15 @@ function DetailItem({ label, value, icon: Icon }: { label: string; value: string
 }
 
 export function MovieDetailModal({ movie, onClose }: MovieDetailModalProps) {
+  const detailsQuery = useMovieDetails(movie.id)
   const { data, isLoading, isError } = useMovieVideos(movie.id)
+  const detailMovie = detailsQuery.data ?? movie
   const video = data?.results.find((item) => item.site === 'YouTube' && item.key)
-  const genres = Array.isArray(movie.genres) ? movie.genres : []
-  const companies = Array.isArray(movie.production_companies) ? movie.production_companies : []
-  const countries = Array.isArray(movie.production_countries) ? movie.production_countries : []
-  const languages = Array.isArray(movie.spoken_languages) ? movie.spoken_languages : []
-  const originCountries = Array.isArray(movie.origin_country) ? movie.origin_country : []
+  const genres = Array.isArray(detailMovie.genres) ? detailMovie.genres : []
+  const companies = Array.isArray(detailMovie.production_companies) ? detailMovie.production_companies : []
+  const countries = Array.isArray(detailMovie.production_countries) ? detailMovie.production_countries : []
+  const languages = Array.isArray(detailMovie.spoken_languages) ? detailMovie.spoken_languages : []
+  const originCountries = Array.isArray(detailMovie.origin_country) ? detailMovie.origin_country : []
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -82,16 +85,16 @@ export function MovieDetailModal({ movie, onClose }: MovieDetailModalProps) {
         className="movie-modal-panel mx-auto min-w-0 w-full max-w-6xl overflow-hidden rounded-3xl border border-white/15 bg-[#14161c] shadow-2xl shadow-black/70"
       >
         <div className="relative aspect-video w-full max-h-[72vh] min-h-64 overflow-hidden bg-black">
-          {movie.backdrop_path ? (
-            <img src={`${imageBaseUrl}${movie.backdrop_path}`} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
+          {detailMovie.backdrop_path ? (
+            <img src={`${imageBaseUrl}${detailMovie.backdrop_path}`} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
           ) : null}
           {isLoading ? (
             <div className="relative flex h-full items-center justify-center text-zinc-400"><LoaderCircle className="mr-2 size-6 animate-spin" />Cargando tráiler...</div>
           ) : video ? (
             <iframe
               className="relative block h-full w-full border-0"
-              src={`https://www.youtube.com/embed/${video.key}?autoplay=1&rel=0`}
-              title={video.name || `Video de ${movie.title}`}
+              src={`https://www.youtube.com/embed/${video.key}?autoplay=1&controls=1&rel=0&playsinline=1`}
+              title={video.name || `Video de ${detailMovie.title}`}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
             />
@@ -102,8 +105,8 @@ export function MovieDetailModal({ movie, onClose }: MovieDetailModalProps) {
           )}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#14161c] via-[#14161c]/80 to-transparent px-6 pb-6 pt-20 sm:px-10 sm:pb-10">
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-red-400">Movie detail</p>
-            <h2 id={`movie-title-${movie.id}`} className="max-w-3xl text-3xl font-black tracking-tight text-white drop-shadow-lg sm:text-5xl">{movie.title}</h2>
-            {movie.tagline ? <p className="mt-2 text-sm italic text-zinc-300">{movie.tagline}</p> : null}
+            <h2 id={`movie-title-${movie.id}`} className="max-w-3xl text-3xl font-black tracking-tight text-white drop-shadow-lg sm:text-5xl">{detailMovie.title}</h2>
+            {detailMovie.tagline ? <p className="mt-2 text-sm italic text-zinc-300">{detailMovie.tagline}</p> : null}
           </div>
           <button type="button" onClick={onClose} aria-label="Cerrar detalles" className="absolute right-5 top-5 flex size-10 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/60 text-white backdrop-blur-md transition hover:scale-105 hover:bg-red-600">
             <X className="size-5" />
@@ -112,20 +115,20 @@ export function MovieDetailModal({ movie, onClose }: MovieDetailModalProps) {
 
         <div className="movie-detail-scroll min-w-0 w-full max-h-[55vh] overflow-x-hidden overflow-y-auto px-6 pb-10 pt-6 sm:px-10">
           <div className="flex flex-wrap items-center gap-3">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-bold ${getRatingStyles(movie.vote_average)}`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-bold ${getRatingStyles(detailMovie.vote_average)}`}>
               <Star className="size-4 fill-current" />
-              {movie.vote_average.toFixed(1)}
+              {detailMovie.vote_average.toFixed(1)}
             </span>
-            {movie.release_date ? <span className="text-sm text-zinc-400">{movie.release_date.slice(0, 4)}</span> : null}
-            {movie.runtime ? <span className="text-sm text-zinc-400">{movie.runtime} min</span> : null}
+            {detailMovie.release_date ? <span className="text-sm text-zinc-400">{detailMovie.release_date.slice(0, 4)}</span> : null}
+            {detailMovie.runtime ? <span className="text-sm text-zinc-400">{detailMovie.runtime} min</span> : null}
           </div>
-          <p className="mt-6 w-full break-words text-base leading-8 text-zinc-300">{movie.overview || 'Sin descripción disponible.'}</p>
+          <p className="mt-6 w-full break-words text-base leading-8 text-zinc-300">{detailMovie.overview || 'Sin descripción disponible.'}</p>
 
           <div className="mt-8 grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <DetailItem label="Estreno" value={movie.release_date || 'No disponible'} icon={CalendarDays} />
-            <DetailItem label="Duración" value={movie.runtime ? `${movie.runtime} minutos` : 'No disponible'} icon={Clock3} />
-            <DetailItem label="Popularidad" value={movie.popularity.toFixed(1)} icon={Users} />
-            <DetailItem label="Idioma original" value={movie.original_language.toUpperCase()} icon={Globe2} />
+            <DetailItem label="Estreno" value={detailMovie.release_date || 'No disponible'} icon={CalendarDays} />
+            <DetailItem label="Duración" value={detailMovie.runtime ? `${detailMovie.runtime} minutos` : 'No disponible'} icon={Clock3} />
+            <DetailItem label="Popularidad" value={detailMovie.popularity.toFixed(1)} icon={Users} />
+            <DetailItem label="Idioma original" value={detailMovie.original_language.toUpperCase()} icon={Globe2} />
           </div>
 
           <div className="mt-8 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -151,12 +154,12 @@ export function MovieDetailModal({ movie, onClose }: MovieDetailModalProps) {
           </div>
 
           <div className="mt-8 flex min-w-0 flex-wrap items-center gap-3 border-t border-white/10 pt-6 text-sm text-zinc-500">
-            <span>Votos: {movie.vote_count.toLocaleString('es-CO')}</span>
+            <span>Votos: {detailMovie.vote_count.toLocaleString('es-CO')}</span>
             <span>·</span>
-            <span>Presupuesto: {formatMoney(movie.budget)}</span>
+            <span>Presupuesto: {formatMoney(detailMovie.budget)}</span>
             <span>·</span>
-            <span>Recaudación: {formatMoney(movie.revenue)}</span>
-            {movie.homepage ? <a href={movie.homepage} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-2 text-red-400 hover:text-red-300"><ExternalLink className="size-4" />Sitio oficial</a> : null}
+            <span>Recaudación: {formatMoney(detailMovie.revenue)}</span>
+            {detailMovie.homepage ? <a href={detailMovie.homepage} target="_blank" rel="noreferrer" className="ml-auto inline-flex items-center gap-2 text-red-400 hover:text-red-300"><ExternalLink className="size-4" />Sitio oficial</a> : null}
           </div>
         </div>
       </div>

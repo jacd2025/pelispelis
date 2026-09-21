@@ -16,7 +16,7 @@ import tmdbApi from '../api/tmdbApi.js'
  * @property {number} total_results
  */
 
-/** @param {number|string} id */
+/** @param {number|string} id @returns {Promise<import('@/types/movie').Movie>} */
 export const getMovieById = async (id) => {
   const { data } = await tmdbApi.get(`/${id}`)
   return data
