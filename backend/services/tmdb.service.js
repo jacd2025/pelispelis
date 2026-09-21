@@ -17,3 +17,18 @@ export const searchMovies = async (query) => {
     });
     return response.data.results;
 };
+
+// Obtener películas en reproducción de la API de TMDB
+export const getNowPlayingMovies = async () => {
+  const response = await tmdbClient.get('/movie/now_playing');
+  return response.data.results;
+};
+
+// Obtener películas en tendencia de la API de TMDB
+export const getTrendingMovies = async () => {
+  const response = await tmdbClient.get(
+    '/trending/movie/week'
+  );
+
+  return response.data.results;
+};

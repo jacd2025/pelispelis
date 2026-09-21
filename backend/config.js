@@ -12,8 +12,7 @@ const tmdbClient = axios.create({
     'Content-Type': 'application/json',
   },
 });
-console.log('BASE URL:', process.env.TMDB_BASE_URL);
-2
-console.log('TOKEN:', process.env.TMDB_ACCESS_TOKEN?.substring(0, 10));
+//console.log('BASE URL:', process.env.TMDB_BASE_URL);
+//console.log('TOKEN:', process.env.TMDB_ACCESS_TOKEN?.substring(0, 10));
 
 export default tmdbClient;

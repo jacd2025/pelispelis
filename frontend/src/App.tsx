@@ -1,25 +1,15 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
+import { Comunidad } from '@/pages/Comunidad'
+import { Favoritos } from '@/pages/Favoritos'
+import { Home } from '@/pages/Home'
 
 function App() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <nav className="border-b px-6 py-4">
-        <Link to="/" className="font-semibold">Pelispelis</Link>
-      </nav>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <section className="mx-auto max-w-3xl px-6 py-16">
-              <h1 className="text-4xl font-bold tracking-tight">Bienvenido a Pelispelis</h1>
-              <p className="mt-4 text-muted-foreground">
-                Tu aplicación de películas está lista para comenzar.
-              </p>
-            </section>
-          }
-        />
-      </Routes>
-    </main>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/favoritos" element={<Favoritos />} />
+      <Route path="/comunidad" element={<Comunidad />} />
+    </Routes>
   )
 }
 

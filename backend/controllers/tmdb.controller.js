@@ -1,4 +1,10 @@
-import { getMovieById, getPopularMovies, searchMovies } from '../services/tmdb.service.js';
+import { 
+  getMovieById, 
+  getPopularMovies, 
+  searchMovies,
+  getNowPlayingMovies,
+  getTrendingMovies
+ } from '../services/tmdb.service.js';
 
 // Obtener películas populares de la API de TMDB por ID
 export const cgetMovieById = async (req, res) => {
@@ -38,6 +44,37 @@ export const csearchMovies = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: error.message
+    });
+  }
+};
+
+// Obtener películas en reproducción de la API de TMDB
+export const cgetNowPlayingMovies = async (req, res) => {
+  try {
+    const movies = await getNowPlayingMovies();
+
+    res.json(movies);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+//obtener peliculas que estan en tendencia de la API de TMDB
+export const cgetTrendingMovies = async (_req, res) => {
+  try {
+    const movies = await getTrendingMovies();
+
+    return res.json(movies);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(
+      error.response?.status || 500
+    ).json({
+      message: error.message,
+      error: error.response?.data,
     });
   }
 };
