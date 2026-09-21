@@ -36,6 +36,12 @@ export const getTrendingMovies = async () => {
 
 /** @param {string} query @returns {Promise<Movie[]>} */
 export const searchMovies = async (query) => {
-  const { data } = await tmdbApi.get(`/search?q=${encodeURIComponent(query)}`)
+  const { data } = await tmdbApi.get(`/search?query=${encodeURIComponent(query)}`)
   return data
+}
+
+/** @param {number} id @returns {Promise<import('@/types/movie').MovieVideosResponse>} */
+export const getMovieVideos = async (id) => {
+  const { data } = await tmdbApi.get(`/${id}/videos`)
+  return Array.isArray(data) ? { results: data } : data
 }

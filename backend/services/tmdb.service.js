@@ -32,3 +32,17 @@ export const getTrendingMovies = async () => {
 
   return response.data.results;
 };
+
+// Obtener videos de una película de la API de TMDB
+export const getMovieDetails = async (id) => {
+  const response = await tmdbClient.get(
+    `/movie/${id}`,
+    {
+      params: {
+        append_to_response: 'videos,credits'
+      }
+    }
+  );
+
+  return response.data;
+};

@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
-import { Heart, Info } from 'lucide-react'
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Header } from '@/components/Header'
 import { HeroCarousel } from '@/components/HeroCarousel'
+import { MovieCard } from '@/components/MovieCard'
 import { usePopularMovies } from '@/hooks/usePopularMovies'
 import { useTrendingMovies } from '@/hooks/useTrendingMovies'
 
@@ -61,46 +60,10 @@ export function Home() {
         </p>
       <div className="mx-auto grid max-w-7xl gap-6 pb-20 pt-10 sm:grid-cols-2 lg:grid-cols-4">
         {popularMovies.map((movie) => (
-          <article
+          <MovieCard
             key={movie.id}
-            className="group overflow-hidden rounded-xl border border-white/10 bg-[#17191f] shadow-xl shadow-black/20 transition-transform hover:-translate-y-1 hover:border-red-500/50"
-          >
-            <div className="relative aspect-[2/3] overflow-hidden bg-zinc-900">
-              {movie.poster_path ? (
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                  alt={`Poster de ${movie.title}`}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-sm text-zinc-500">
-                  Imagen no disponible
-                </div>
-              )}
-              <button
-                type="button"
-                aria-label={`Añadir ${movie.title} a favoritos`}
-                className="absolute right-3 top-3 flex size-9 cursor-pointer items-center justify-center rounded-full bg-black/70 text-white backdrop-blur transition-colors hover:bg-red-600"
-              >
-                <Heart className="size-4" />
-              </button>
-            </div>
-            <div className="flex items-center justify-between gap-3 p-4">
-              <h2 className="line-clamp-2 font-bold text-white">{movie.title}</h2>
-              <Link
-                to={`/pelicula/${movie.id}`}
-                aria-label={`Ver detalles de ${movie.title}`}
-                className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-white/10 text-zinc-400 transition-colors hover:border-red-500 hover:text-red-400"
-              >
-                <Info className="size-4" />
-              </Link>
-            </div>
-            <p className="px-4 pb-4 text-sm text-zinc-500">
-              {movie.release_date ? movie.release_date.slice(0, 4) : 'Sin fecha'}
-              {' · '}
-              {movie.vote_average.toFixed(1)} ★
-            </p>
-          </article>
+            movie={movie}
+          />
         ))}
       </div>
       </section>

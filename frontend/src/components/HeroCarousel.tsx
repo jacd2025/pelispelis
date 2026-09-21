@@ -38,7 +38,7 @@ export function HeroCarousel({ movies }: HeroCarouselProps) {
             key={movie.id}
             src={`${backdropBaseUrl}${movie.backdrop_path}`}
             alt=""
-            className="absolute inset-0 -z-20 h-full w-full object-cover object-center motion-safe:animate-in motion-safe:fade-in motion-safe:duration-700"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-top motion-safe:animate-in motion-safe:fade-in motion-safe:duration-700"
           />
         ) : null}
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0d0f14]/95 via-[#0d0f14]/65 to-[#0d0f14]/15" />

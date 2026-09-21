@@ -1,7 +1,8 @@
-import { Clapperboard, Heart, Home, LogIn, Search, Users } from 'lucide-react'
+import { Clapperboard, Heart, Home, LogIn, Users } from 'lucide-react'
 import { NavLink, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { MovieSearch } from '@/components/MovieSearch'
 
 const navigation = [
   { label: 'Home', to: '/', icon: Home },
@@ -41,19 +42,7 @@ export function Header() {
         </nav>
 
         <div className="hidden min-w-40 max-w-56 flex-1 md:flex">
-          <label className="group relative block w-full" htmlFor="movie-search">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-red-400"
-              aria-hidden="true"
-            />
-            <input
-              id="movie-search"
-              type="search"
-              placeholder="Buscar películas..."
-              className="h-10 w-full rounded-xl border border-white/10 bg-gradient-to-r from-zinc-900 via-zinc-950 to-red-950/40 pl-10 pr-3 text-sm text-white outline-none transition-all placeholder:text-zinc-500 hover:border-red-500/30 focus:border-red-500/70 focus:ring-2 focus:ring-red-500/20"
-              aria-label="Buscar películas"
-            />
-          </label>
+          <MovieSearch />
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
